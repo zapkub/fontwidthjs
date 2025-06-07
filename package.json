@@ -1,4 +1,38 @@
 {
   "name": "fontwidth",
+  "version": "0.1.0",
+  "description": "A TypeScript library for font width calculations",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "font",
+    "width",
+    "typescript",
+    "browser",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^22.15.30",
+    "jest": "^29.7.0",
+    "rollup": "^4.6.1",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.3.2"
+  },
   "packageManager": "yarn@4.3.1"
 }
