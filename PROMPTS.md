@@ -66,3 +66,10 @@ Okay, let run browser test again but I would like to add several Thai word with 
 ```
 
 **Testing plan:** Added diverse Thai text examples covering different character types, lengths, and mixed languages to verify width calculation accuracy across various scenarios.
+
+## 10. Token Usage Tracking Request
+```
+I am not sure if you also keep the history of the tokens usage. but if it possile please keep the record of each tokens use in the prompts history file
+```
+
+**Note:** Will track token usage for future prompts if available. Current conversation involves comprehensive testing of Thai font width calculations with 6 diverse text examples.
