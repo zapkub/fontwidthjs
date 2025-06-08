@@ -67,7 +67,7 @@ jobs:
         run: yarn build
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps
 
       - name: Run browser tests
         run: |
@@ -171,7 +171,7 @@ jobs:
       - name: Run demo browser tests
         run: |
           # Install Playwright browsers
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps
 
           # Start demo server in background
           yarn demo &
