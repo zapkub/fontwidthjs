@@ -6,7 +6,10 @@ const path = require('path');
 async function demonstrateLibrary() {
   try {
     // Load a Thai font
-    const fontPath = path.join(__dirname, '../tests/fixtures/fonts/NotoSansThai-Regular.ttf');
+    const fontPath = path.join(
+      __dirname,
+      '../tests/fixtures/fonts/NotoSansThai-Regular.ttf'
+    );
     const fontBuffer = fs.readFileSync(fontPath);
 
     console.log('🚀 FontWidth Library Demo\n');
@@ -37,7 +40,11 @@ async function demonstrateLibrary() {
 
     // Example 4: Mixed text
     console.log('📝 Example 4: Mixed Thai-English Text');
-    const mixedResult = calculateFontSize('Hello สวัสดี World!', 250, fontBuffer);
+    const mixedResult = calculateFontSize(
+      'Hello สวัสดี World!',
+      250,
+      fontBuffer
+    );
     console.log(`Text: "Hello สวัสดี World!"`);
     console.log(`Max Width: 250px`);
     console.log(`Optimal Font Size: ${mixedResult.fontSize}px`);
@@ -48,7 +55,7 @@ async function demonstrateLibrary() {
     const customResult = calculateFontSize('การออกแบบ', 100, fontBuffer, {
       minFontSize: 12,
       maxFontSize: 24,
-      precision: 0.5
+      precision: 0.5,
     });
     console.log(`Text: "การออกแบบ" (design)`);
     console.log(`Max Width: 100px`);
@@ -57,7 +64,6 @@ async function demonstrateLibrary() {
     console.log(`Actual Width: ${customResult.actualWidth.toFixed(2)}px\n`);
 
     console.log('✅ Demo completed successfully!');
-
   } catch (error) {
     console.error('❌ Error:', error.message);
   }

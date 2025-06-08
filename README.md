@@ -16,9 +16,9 @@ A TypeScript library for precise font size calculation that fits text within spe
 ## 🚀 Installation
 
 ```bash
-npm install fontwidth
-# or
 yarn add fontwidth
+# or
+npm install fontwidth
 ```
 
 ## 📖 Usage
@@ -34,9 +34,9 @@ const fontBuffer = fs.readFileSync('path/to/your/font.ttf');
 
 // Calculate optimal font size
 const result = calculateFontSize(
-  'สวัสดีครับ',  // Thai text
-  300,           // Maximum width in pixels
-  fontBuffer     // Font file buffer
+  'สวัสดีครับ', // Thai text
+  300, // Maximum width in pixels
+  fontBuffer // Font file buffer
 );
 
 console.log(`Optimal font size: ${result.fontSize}px`);
@@ -47,9 +47,9 @@ console.log(`Actual width: ${result.actualWidth}px`);
 
 ```typescript
 const result = calculateFontSize(text, maxWidth, fontBuffer, {
-  minFontSize: 8,      // Minimum font size (default: 8)
-  maxFontSize: 100,    // Maximum font size (default: 100)
-  precision: 0.1       // Font size precision (default: 0.1)
+  minFontSize: 8, // Minimum font size (default: 8)
+  maxFontSize: 100, // Maximum font size (default: 100)
+  precision: 0.1, // Font size precision (default: 0.1)
 });
 ```
 
@@ -58,25 +58,25 @@ const result = calculateFontSize(text, maxWidth, fontBuffer, {
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <script type="module">
-    import { calculateFontSize } from './dist/index.esm.js';
-    
-    // Load font file from user input or fetch
-    const response = await fetch('fonts/NotoSansThai-Regular.ttf');
-    const fontBuffer = await response.arrayBuffer();
-    
-    const result = calculateFontSize('การคำนวณฟอนต์', 250, fontBuffer);
-    
-    // Apply to DOM element
-    const element = document.getElementById('text');
-    element.style.fontSize = result.fontSize + 'px';
-    element.textContent = 'การคำนวณฟอนต์';
-  </script>
-</head>
-<body>
-  <div id="text"></div>
-</body>
+  <head>
+    <script type="module">
+      import { calculateFontSize } from './dist/index.esm.js';
+
+      // Load font file from user input or fetch
+      const response = await fetch('fonts/NotoSansThai-Regular.ttf');
+      const fontBuffer = await response.arrayBuffer();
+
+      const result = calculateFontSize('การคำนวณฟอนต์', 250, fontBuffer);
+
+      // Apply to DOM element
+      const element = document.getElementById('text');
+      element.style.fontSize = result.fontSize + 'px';
+      element.textContent = 'การคำนวณฟอนต์';
+    </script>
+  </head>
+  <body>
+    <div id="text"></div>
+  </body>
 </html>
 ```
 
@@ -117,9 +117,9 @@ calculateFontSize('Hello สวัสดี World', 350, fontBuffer);
 
 ```typescript
 interface CalculateFontSizeOptions {
-  minFontSize?: number;  // Minimum font size (default: 8)
-  maxFontSize?: number;  // Maximum font size (default: 100)
-  precision?: number;    // Font size precision (default: 0.1)
+  minFontSize?: number; // Minimum font size (default: 8)
+  maxFontSize?: number; // Maximum font size (default: 100)
+  precision?: number; // Font size precision (default: 0.1)
 }
 ```
 
@@ -127,9 +127,9 @@ interface CalculateFontSizeOptions {
 
 ```typescript
 interface FontSizeResult {
-  fontSize: number;      // Optimal font size in pixels
-  actualWidth: number;   // Calculated text width in pixels
-  maxWidth: number;      // Input maximum width constraint
+  fontSize: number; // Optimal font size in pixels
+  actualWidth: number; // Calculated text width in pixels
+  maxWidth: number; // Input maximum width constraint
 }
 ```
 
@@ -139,15 +139,16 @@ The library includes an interactive HTML demo showcasing its capabilities:
 
 ```bash
 # Build the library
-npm run build
+yarn build
 
 # Start demo server
-npm run demo
+yarn demo
 
 # Open browser to http://localhost:8000
 ```
 
 The demo features:
+
 - Real-time font size calculation
 - Thai font loading (Noto Sans/Serif Thai)
 - Visual preview with accurate width rendering
@@ -158,18 +159,19 @@ The demo features:
 
 ```bash
 # Run unit tests
-npm test
+yarn test
 
 # Run browser integration tests
-npm run test:browser
+yarn test:browser
 
 # Run tests with coverage
-npm run test:coverage
+yarn test:coverage
 ```
 
 ### Browser Testing
 
 The library includes comprehensive Playwright tests that verify:
+
 - Font loading and rendering accuracy
 - Width calculation precision across diverse Thai texts
 - Visual regression testing with screenshot comparison
@@ -179,16 +181,16 @@ The library includes comprehensive Playwright tests that verify:
 
 ```bash
 # Install dependencies
-npm install
+yarn install
 
 # Build library
-npm run build
+yarn build
 
 # Run development server
-npm run dev
+yarn dev
 
-# Lint code
-npm run lint
+# Lint and format code
+yarn quality:fix
 ```
 
 ### Build Output
@@ -200,6 +202,7 @@ npm run lint
 ## 📦 Font Requirements
 
 The library works with:
+
 - **TTF (TrueType)** fonts
 - **OTF (OpenType)** fonts
 - Fonts must contain proper metric tables for accurate measurements

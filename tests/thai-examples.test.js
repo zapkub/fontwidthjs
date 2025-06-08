@@ -8,16 +8,20 @@ describe('Thai Language Examples', () => {
   let notoSerifThaiBuffer;
 
   beforeAll(() => {
-    notoSansThaiBuffer = fs.readFileSync(path.join(fontsDir, 'NotoSansThai-Regular.ttf'));
-    notoSerifThaiBuffer = fs.readFileSync(path.join(fontsDir, 'NotoSerifThai-Regular.ttf'));
+    notoSansThaiBuffer = fs.readFileSync(
+      path.join(fontsDir, 'NotoSansThai-Regular.ttf')
+    );
+    notoSerifThaiBuffer = fs.readFileSync(
+      path.join(fontsDir, 'NotoSerifThai-Regular.ttf')
+    );
   });
 
   test('handles common Thai greetings', () => {
     const greetings = [
-      'สวัสดี',      // Hello
-      'สวัสดีครับ',   // Hello (male)
-      'สวัสดีค่ะ',    // Hello (female)
-      'ยินดีที่ได้รู้จัก' // Nice to meet you
+      'สวัสดี', // Hello
+      'สวัสดีครับ', // Hello (male)
+      'สวัสดีค่ะ', // Hello (female)
+      'ยินดีที่ได้รู้จัก', // Nice to meet you
     ];
 
     greetings.forEach(greeting => {
@@ -30,12 +34,12 @@ describe('Thai Language Examples', () => {
 
   test('handles Thai text with various combining marks', () => {
     const textsWithMarks = [
-      'เก่า',         // old (with tone mark)
-      'ใหม่',         // new (with tone mark)
-      'คิด',          // think
-      'ดู',           // see/watch
-      'เรียน',        // study/learn
-      'ทำงาน'         // work
+      'เก่า', // old (with tone mark)
+      'ใหม่', // new (with tone mark)
+      'คิด', // think
+      'ดู', // see/watch
+      'เรียน', // study/learn
+      'ทำงาน', // work
     ];
 
     textsWithMarks.forEach(text => {
@@ -54,7 +58,7 @@ describe('Thai Language Examples', () => {
     // Both should fit in the space
     expect(sansResult.actualWidth).toBeLessThanOrEqual(200);
     expect(serifResult.actualWidth).toBeLessThanOrEqual(200);
-    
+
     // Font sizes might be different due to different metrics
     expect(sansResult.fontSize).toBeGreaterThan(0);
     expect(serifResult.fontSize).toBeGreaterThan(0);
@@ -65,7 +69,7 @@ describe('Thai Language Examples', () => {
       'Hello สวัสดี',
       'TypeScript และ JavaScript',
       'Google Font ฟอนต์ไทย',
-      'React.js กับ Vue.js'
+      'React.js กับ Vue.js',
     ];
 
     mixedTexts.forEach(text => {
@@ -77,7 +81,7 @@ describe('Thai Language Examples', () => {
 
   test('handles long Thai sentences', () => {
     const longText = 'ภาษาไทยเป็นภาษาที่มีความสวยงามและมีเอกลักษณ์เฉพาะตัว';
-    
+
     const result = calculateFontSize(longText, 400, notoSansThaiBuffer);
     expect(result.fontSize).toBeGreaterThan(0);
     expect(result.actualWidth).toBeLessThanOrEqual(400);
@@ -89,7 +93,7 @@ describe('Thai Language Examples', () => {
 
     // Test different max widths
     const constraints = [100, 200, 300];
-    const results = constraints.map(maxWidth => 
+    const results = constraints.map(maxWidth =>
       calculateFontSize(text, maxWidth, notoSansThaiBuffer)
     );
 

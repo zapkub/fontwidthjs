@@ -19,7 +19,7 @@ module.exports = {
   plugins: [
     nodeResolve({
       preferBuiltins: false,
-      browser: true
+      browser: true,
     }),
     commonjs(),
     typescript({

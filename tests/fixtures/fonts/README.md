@@ -5,13 +5,15 @@ This directory contains Thai font files downloaded from Google Fonts for testing
 ## Available Fonts
 
 ### Noto Sans Thai
+
 A modern, clean sans-serif Thai font from Google's Noto font family.
 
 - **NotoSansThai-Regular.ttf** - Regular weight (400)
-- **NotoSansThai-Light.ttf** - Light weight (300)  
+- **NotoSansThai-Light.ttf** - Light weight (300)
 - **NotoSansThai-Bold.ttf** - Bold weight (700)
 
 ### Noto Serif Thai
+
 A traditional serif Thai font from Google's Noto font family.
 
 - **NotoSerifThai-Regular.ttf** - Regular weight (400)
@@ -20,6 +22,7 @@ A traditional serif Thai font from Google's Noto font family.
 ## Font Information
 
 All fonts are:
+
 - Licensed under the Open Font License (OFL)
 - Downloaded from Google Fonts API
 - Subset: Thai + Latin

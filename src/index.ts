@@ -3,7 +3,7 @@ import * as opentype from 'opentype.js';
 /**
  * Font input type - can be Buffer, ArrayBuffer, or base64 string
  */
-export type FontInput = any | ArrayBuffer | string;
+export type FontInput = Buffer | ArrayBuffer | string;
 
 /**
  * Options for calculating font size
@@ -25,7 +25,7 @@ export interface FontSizeResult {
 
 /**
  * Calculate the optimal font size to fit text within maximum width
- * 
+ *
  * @param text - The text string to measure
  * @param maxWidth - Maximum width in pixels
  * @param fontInput - Font file as Buffer, ArrayBuffer, or base64 string
@@ -38,15 +38,11 @@ export function calculateFontSize(
   fontInput: FontInput,
   options: CalculateFontSizeOptions = {}
 ): FontSizeResult {
-  const {
-    minFontSize = 8,
-    maxFontSize = 200,
-    precision = 0.1
-  } = options;
+  const { minFontSize = 8, maxFontSize = 200, precision = 0.1 } = options;
 
   // Parse font from input
   const font = parseFontInput(fontInput);
-  
+
   // Binary search for optimal font size
   let low = minFontSize;
   let high = maxFontSize;
@@ -56,7 +52,7 @@ export function calculateFontSize(
   while (high - low > precision) {
     const mid = (low + high) / 2;
     const width = calculateTextWidth(text, font, mid);
-    
+
     if (width <= maxWidth) {
       bestFontSize = mid;
       bestWidth = width;
@@ -69,7 +65,7 @@ export function calculateFontSize(
   return {
     fontSize: Math.round(bestFontSize * 10) / 10, // Round to 1 decimal place
     actualWidth: bestWidth,
-    maxWidth
+    maxWidth,
   };
 }
 
@@ -88,11 +84,12 @@ function parseFontInput(fontInput: FontInput): opentype.Font {
     for (let i = 0; i < binaryString.length; i++) {
       view[i] = binaryString.charCodeAt(i);
     }
-  } else if (fontInput && typeof fontInput.buffer !== 'undefined') {
+  } else if (fontInput && 'buffer' in fontInput) {
     // Handle Node.js Buffer
-    buffer = fontInput.buffer.slice(
-      fontInput.byteOffset,
-      fontInput.byteOffset + fontInput.byteLength
+    const bufferInput = fontInput as Buffer;
+    buffer = bufferInput.buffer.slice(
+      bufferInput.byteOffset,
+      bufferInput.byteOffset + bufferInput.byteLength
     );
   } else {
     // Handle ArrayBuffer
@@ -103,29 +100,33 @@ function parseFontInput(fontInput: FontInput): opentype.Font {
   if (!font.supported) {
     throw new Error('Unsupported font format');
   }
-  
+
   return font;
 }
 
 /**
  * Calculate the width of text at a given font size
  */
-function calculateTextWidth(text: string, font: opentype.Font, fontSize: number): number {
+function calculateTextWidth(
+  text: string,
+  font: opentype.Font,
+  fontSize: number
+): number {
   let totalWidth = 0;
-  const scale = 1 / font.unitsPerEm * fontSize;
+  const scale = (1 / font.unitsPerEm) * fontSize;
 
   // Handle Thai text with proper Unicode normalization
   const normalizedText = normalizeThaiText(text);
-  
+
   for (let i = 0; i < normalizedText.length; i++) {
     const char = normalizedText[i];
     const glyph = font.charToGlyph(char);
-    
+
     if (glyph) {
       // Get advance width for the glyph
       const advanceWidth = glyph.advanceWidth || 0;
       totalWidth += advanceWidth * scale;
-      
+
       // Apply kerning if available and not the last character
       if (i < normalizedText.length - 1) {
         const nextChar = normalizedText[i + 1];
