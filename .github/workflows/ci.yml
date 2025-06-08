@@ -74,13 +74,13 @@ jobs:
           # Start demo server for browser tests
           yarn demo &
           SERVER_PID=$!
-          
+
           # Wait for server to start
           sleep 5
-          
+
           # Run browser tests
           yarn test:browser
-          
+
           # Clean up server
           kill $SERVER_PID || true
 
@@ -176,13 +176,13 @@ jobs:
           # Start demo server in background
           yarn demo &
           SERVER_PID=$!
-          
+
           # Wait for server to start
           sleep 5
-          
+
           # Run browser tests
           yarn test:browser
-          
+
           # Clean up server
           kill $SERVER_PID || true
 
