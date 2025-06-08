@@ -1,7 +1,7 @@
 /**
  * Font input type - can be Buffer, ArrayBuffer, or base64 string
  */
-export type FontInput = any | ArrayBuffer | string;
+export type FontInput = Buffer | ArrayBuffer | string;
 /**
  * Options for calculating font size
  */

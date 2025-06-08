@@ -14354,7 +14354,7 @@ function calculateFontSize(text, maxWidth, fontInput, options = {}) {
     return {
         fontSize: Math.round(bestFontSize * 10) / 10, // Round to 1 decimal place
         actualWidth: bestWidth,
-        maxWidth
+        maxWidth,
     };
 }
 /**
@@ -14372,9 +14372,10 @@ function parseFontInput(fontInput) {
             view[i] = binaryString.charCodeAt(i);
         }
     }
-    else if (fontInput && typeof fontInput.buffer !== 'undefined') {
+    else if (fontInput && 'buffer' in fontInput) {
         // Handle Node.js Buffer
-        buffer = fontInput.buffer.slice(fontInput.byteOffset, fontInput.byteOffset + fontInput.byteLength);
+        const bufferInput = fontInput;
+        buffer = bufferInput.buffer.slice(bufferInput.byteOffset, bufferInput.byteOffset + bufferInput.byteLength);
     }
     else {
         // Handle ArrayBuffer
@@ -14391,7 +14392,7 @@ function parseFontInput(fontInput) {
  */
 function calculateTextWidth(text, font, fontSize) {
     let totalWidth = 0;
-    const scale = 1 / font.unitsPerEm * fontSize;
+    const scale = (1 / font.unitsPerEm) * fontSize;
     // Handle Thai text with proper Unicode normalization
     const normalizedText = normalizeThaiText(text);
     for (let i = 0; i < normalizedText.length; i++) {

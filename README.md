@@ -210,7 +210,7 @@ All checks must pass before code can be merged. The CI pipeline automatically ru
 
 ### Build Output
 
-- **`dist/index.cjs.js`**: CommonJS build for Node.js
+- **`dist/index.js`**: CommonJS build for Node.js
 - **`dist/index.esm.js`**: ES modules build for modern browsers
 - **`dist/index.d.ts`**: TypeScript type definitions
 
