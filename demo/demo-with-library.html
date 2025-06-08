@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FontWidth Library Demo - Real Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+
+        .control-group input,
+        .control-group select,
+        .control-group textarea {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus,
+        .control-group textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .result-container {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result-item .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .result-item .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .preview-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            background: #fefefe;
+            overflow-x: auto;
+        }
+
+        .preview-text {
+            display: inline-block;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-family: 'Noto Sans Thai', sans-serif;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .example-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .example-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .example-text {
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-size: 1.1rem;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .example-info {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* We'll load fonts dynamically to ensure consistency with library */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔤 FontWidth Library Demo</h1>
+            <p>Real implementation using Thai font files</p>
+        </div>
+
+        <div class="content">
+            <!-- Font Loading Section -->
+            <div class="demo-section">
+                <h2>📁 Load Font File</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="font-file">Choose Thai Font File</label>
+                        <input type="file" id="font-file" accept=".ttf,.otf" onchange="loadFontFile(this)">
+                    </div>
+                    <div class="control-group">
+                        <label>Quick Load</label>
+                        <div>
+                            <button class="button" onclick="loadDemoFont('noto-sans')">Load Noto Sans Thai</button>
+                            <button class="button" onclick="loadDemoFont('noto-serif')">Load Noto Serif Thai</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="font-status" class="loading">No font loaded</div>
+            </div>
+
+            <!-- Interactive Calculator -->
+            <div class="demo-section">
+                <h2>🛠️ Font Size Calculator</h2>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="text-input">Text to Measure</label>
+                        <textarea id="text-input" placeholder="Enter Thai or English text...">สวัสดีครับ</textarea>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="max-width">Maximum Width (px)</label>
+                        <input type="number" id="max-width" value="300" min="50" max="800">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="min-font-size">Min Font Size</label>
+                        <input type="number" id="min-font-size" value="8" min="4" max="50">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="max-font-size">Max Font Size</label>
+                        <input type="number" id="max-font-size" value="100" min="20" max="200">
+                    </div>
+                </div>
+                
+                <button class="button" onclick="calculateOptimalFontSize()" id="calc-button" disabled>
+                    📐 Calculate Font Size (Load font first)
+                </button>
+                
+                <div class="result-container" id="results" style="display: none;">
+                    <h3>📊 Results</h3>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Font Size</div>
+                            <div class="value" id="result-font-size">--</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Actual Width</div>
+                            <div class="value" id="result-actual-width">--</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Efficiency</div>
+                            <div class="value" id="result-efficiency">--</div>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-container">
+                        <div style="margin-bottom: 10px; font-weight: 600;">📱 Live Preview</div>
+                        <div id="preview-text" class="preview-text">Preview text</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Texts -->
+            <div class="demo-section">
+                <h2>🇹🇭 Thai Text Examples</h2>
+                <div class="examples">
+                    <div class="example-card" onclick="loadExample('สวัสดี', 200)">
+                        <div class="example-text">สวัสดี</div>
+                        <div class="example-info">Basic greeting</div>
+                    </div>
+                    <div class="example-card" onclick="loadExample('สวัสดีครับ', 250)">
+                        <div class="example-text">สวัสดีครับ</div>
+                        <div class="example-info">Polite greeting (male)</div>
+                    </div>
+                    <div class="example-card" onclick="loadExample('เก่าใหม่', 180)">
+                        <div class="example-text">เก่าใหม่</div>
+                        <div class="example-info">With tone marks</div>
+                    </div>
+                    <div class="example-card" onclick="loadExample('ยินดีที่ได้รู้จัก', 400)">
+                        <div class="example-text">ยินดีที่ได้รู้จัก</div>
+                        <div class="example-info">Nice to meet you</div>
+                    </div>
+                    <div class="example-card" onclick="loadExample('Hello สวัสดี World', 350)">
+                        <div class="example-text">Hello สวัสดี World</div>
+                        <div class="example-info">Mixed languages</div>
+                    </div>
+                    <div class="example-card" onclick="loadExample('การคำนวณฟอนต์', 300)">
+                        <div class="example-text">การคำนวณฟอนต์</div>
+                        <div class="example-info">Font calculation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the fontwidth library -->
+    <script type="module">
+        // Import the ESM build of the library
+        let fontBuffer = null;
+        let calculateFontSize = null;
+
+        // Try to load the library
+        try {
+            // In a real deployment, this would be:
+            // import { calculateFontSize } from './path-to-fontwidth-library';
+            
+            // For demo purposes, we'll load it dynamically
+            import('../dist/index.esm.js').then(module => {
+                calculateFontSize = module.calculateFontSize || module.default;
+                console.log('FontWidth library loaded successfully');
+            }).catch(err => {
+                console.warn('Could not load fontwidth library:', err);
+                // Fallback to mock implementation
+                loadMockImplementation();
+            });
+        } catch (err) {
+            console.warn('Import error, using mock implementation:', err);
+            loadMockImplementation();
+        }
+
+        function loadMockImplementation() {
+            // Simple mock for demo when library is not available
+            calculateFontSize = function(text, maxWidth, fontBuffer, options = {}) {
+                const { minFontSize = 8, maxFontSize = 100 } = options;
+                
+                // Simple character-based width calculation
+                const avgCharWidth = 0.6; // Approximate ratio
+                const textLength = text.length;
+                const roughFontSize = Math.min(maxFontSize, Math.max(minFontSize, maxWidth / (textLength * avgCharWidth)));
+                const actualWidth = textLength * avgCharWidth * roughFontSize;
+                
+                return {
+                    fontSize: Math.round(roughFontSize * 10) / 10,
+                    actualWidth: Math.round(actualWidth * 10) / 10,
+                    maxWidth: maxWidth
+                };
+            };
+        }
+
+        // Create dynamic @font-face declarations
+        function createFontFace(fontFamily, fontData) {
+            const base64Font = btoa(String.fromCharCode(...new Uint8Array(fontData)));
+            const fontDataUrl = `data:font/truetype;charset=utf-8;base64,${base64Font}`;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @font-face {
+                    font-family: '${fontFamily}';
+                    src: url('${fontDataUrl}') format('truetype');
+                    font-weight: normal;
+                    font-style: normal;
+                    font-display: swap;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            console.log(`Font face created for: ${fontFamily}`);
+            return fontFamily;
+        }
+
+        // Font loading functions
+        window.loadFontFile = async function(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                fontBuffer = arrayBuffer;
+                
+                // Create @font-face for CSS usage
+                const fontFamily = 'CustomLoadedFont';
+                createFontFace(fontFamily, arrayBuffer);
+                window.currentFontFamily = fontFamily;
+                
+                document.getElementById('font-status').innerHTML = 
+                    `<div style="color: #16a34a;">✅ Font loaded: ${file.name} (${Math.round(file.size / 1024)} KB)</div>`;
+                document.getElementById('calc-button').disabled = false;
+                document.getElementById('calc-button').textContent = '📐 Calculate Font Size';
+                
+            } catch (error) {
+                document.getElementById('font-status').innerHTML = 
+                    `<div class="error">❌ Error loading font: ${error.message}</div>`;
+            }
+        };
+
+        window.loadDemoFont = async function(fontType) {
+            try {
+                document.getElementById('font-status').innerHTML = 
+                    '<div class="loading">⏳ Loading font...</div>';
+
+                const fontFileName = fontType === 'noto-serif' ? 
+                    'NotoSerifThai-Regular.ttf' : 'NotoSansThai-Regular.ttf';
+                
+                const response = await fetch(`../tests/fixtures/fonts/${fontFileName}`);
+                if (!response.ok) throw new Error('Font file not found');
+                
+                fontBuffer = await response.arrayBuffer();
+                
+                // Create @font-face for CSS usage
+                const fontFamily = fontType === 'noto-serif' ? 'NotoSerifThaiLoaded' : 'NotoSansThaiLoaded';
+                createFontFace(fontFamily, fontBuffer);
+                window.currentFontFamily = fontFamily;
+                
+                document.getElementById('font-status').innerHTML = 
+                    `<div style="color: #16a34a;">✅ ${fontType === 'noto-serif' ? 'Noto Serif Thai' : 'Noto Sans Thai'} loaded successfully</div>`;
+                document.getElementById('calc-button').disabled = false;
+                document.getElementById('calc-button').textContent = '📐 Calculate Font Size';
+                
+            } catch (error) {
+                document.getElementById('font-status').innerHTML = 
+                    `<div class="error">❌ Could not load demo font. Please upload your own font file.</div>`;
+                console.error('Font loading error:', error);
+            }
+        };
+
+        // Calculation function
+        window.calculateOptimalFontSize = function() {
+            if (!fontBuffer) {
+                alert('Please load a font file first');
+                return;
+            }
+
+            if (!calculateFontSize) {
+                alert('FontWidth library not loaded');
+                return;
+            }
+
+            const text = document.getElementById('text-input').value.trim();
+            const maxWidth = parseInt(document.getElementById('max-width').value);
+            const minFontSize = parseInt(document.getElementById('min-font-size').value);
+            const maxFontSize = parseInt(document.getElementById('max-font-size').value);
+            
+            if (!text) {
+                alert('Please enter some text to measure');
+                return;
+            }
+            
+            try {
+                const result = calculateFontSize(text, maxWidth, fontBuffer, {
+                    minFontSize,
+                    maxFontSize,
+                    precision: 0.1
+                });
+                
+                // Display results
+                document.getElementById('result-font-size').textContent = result.fontSize + 'px';
+                document.getElementById('result-actual-width').textContent = result.actualWidth.toFixed(1) + 'px';
+                document.getElementById('result-efficiency').textContent = 
+                    Math.round((result.actualWidth / result.maxWidth) * 100) + '%';
+                
+                // Update preview
+                const previewElement = document.getElementById('preview-text');
+                previewElement.textContent = text;
+                previewElement.style.fontSize = result.fontSize + 'px';
+                
+                previewElement.style.maxWidth = maxWidth + 'px';
+                
+                // Apply the loaded font family
+                if (window.currentFontFamily) {
+                    previewElement.style.fontFamily = `'${window.currentFontFamily}', sans-serif`;
+                    console.log(`Applied font: ${window.currentFontFamily}`);
+                }
+                
+                // Show results
+                document.getElementById('results').style.display = 'block';
+                
+                console.log('Calculation result:', result);
+                
+            } catch (error) {
+                document.getElementById('font-status').innerHTML = 
+                    `<div class="error">❌ Calculation error: ${error.message}</div>`;
+                console.error('Calculation error:', error);
+            }
+        };
+
+        window.loadExample = function(text, maxWidth) {
+            document.getElementById('text-input').value = text;
+            document.getElementById('max-width').value = maxWidth;
+            
+            if (fontBuffer) {
+                setTimeout(() => {
+                    window.calculateOptimalFontSize();
+                }, 100);
+            }
+        };
+
+        // Try to load a demo font on page load
+        setTimeout(() => {
+            window.loadDemoFont('noto-sans');
+        }, 1000);
+    </script>
+</body>
+</html>
